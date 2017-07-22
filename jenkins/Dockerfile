@@ -10,12 +10,15 @@ RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common && \
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" && \
-    curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
+    curl -fsSL https://download.docker. com/linux/debian/gpg | apt-key add - && \
     apt-get update && \
     apt-get install -y docker-ce && \
     apt-get install sudo zip python-pip -y && \
     pip install docker-compose && \
     echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers && \
-    rm -rf /var/lib/apt/lists/*
+    # cleanup
+    apt-get clean && \
+    cd /var/lib/apt/lists && rm -fr *Release* *Sources* *Packages* && \
+    truncate -s 0 /var/log/*log
 
 USER jenkins
